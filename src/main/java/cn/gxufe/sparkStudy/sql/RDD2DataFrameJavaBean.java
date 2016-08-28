@@ -26,7 +26,7 @@ public class RDD2DataFrameJavaBean implements java.io.Serializable{
         JavaSparkContext sc = null;
         SQLContext sqlContext = null;
 
-        SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("RDD2DataFrame");
+        SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("RDD2DataFrameJavaBean");
         sc = new JavaSparkContext(sparkConf);
         sqlContext = new SQLContext(sc);
         /**
