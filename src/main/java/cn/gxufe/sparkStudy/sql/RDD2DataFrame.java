@@ -52,7 +52,6 @@ public class RDD2DataFrame implements java.io.Serializable{
         List<StructField> structFields = new ArrayList<StructField>();
         structFields.add(DataTypes.createStructField("name", DataTypes.StringType, true));
         structFields.add(DataTypes.createStructField("age", DataTypes.IntegerType, true));
-
         StructType structType = DataTypes.createStructType(structFields);
 
         DataFrame peopleDf = sqlContext.createDataFrame(peopleRow, structType);
