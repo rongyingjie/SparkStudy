@@ -12,24 +12,23 @@ import org.junit.Test;
  *  @author 燕赤侠
  *  @create 2016-08-28
  *
+ * 说明：
+ *      DataFrame基本操作
+ *
  *  错误：
  *      System memory 259522560 must be at least 4.718592E8. Please use a larger heap size.
  *  解决方法：VM options 设置为：-Xms256m -Xmx1024m 或者更高
  */
 public class DataFrameCreate {
 
-    JavaSparkContext sc = null;
-    SQLContext sqlContext = null;
 
-    @Before
-    public void init(){
+    public static void main(String[] args){
+
+        JavaSparkContext sc = null;
+        SQLContext sqlContext = null;
         SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("DataFrameCreate");
         sc = new JavaSparkContext(sparkConf);
         sqlContext = new SQLContext(sc);
-    }
-
-    @Test
-    public void createByLocalFile(){
 
         //读取spark自带的案例json文件
         /**
@@ -51,11 +50,8 @@ public class DataFrameCreate {
         dataFrame.select(dataFrame.col("age").plus(5)).show();
         dataFrame.groupBy(dataFrame.col("age")).count().show();
 
-    }
-
-    @After
-    public void stopSc(){
         sc.stop();
+
     }
 
 
