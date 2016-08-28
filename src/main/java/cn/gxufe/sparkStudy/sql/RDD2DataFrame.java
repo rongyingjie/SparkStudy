@@ -7,10 +7,14 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SQLContext;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 燕赤侠
@@ -36,38 +40,24 @@ public class RDD2DataFrame implements java.io.Serializable{
          **/
        JavaRDD<String> lines =  sc.textFile("E:\\softPackage\\spark-1.6.1-bin-hadoop2.6\\examples\\src\\main\\resources\\people.txt");
 
-        final JavaRDD<People> peopleRdd =  lines.map(new Function<String, People>() {
-            public People call(String line) throws Exception {
-                String[] split = line.split(",");
-                return new People(split[0], Integer.valueOf(split[1].trim()));
-            }
-        });
-
-        DataFrame peopleDf =  sqlContext.createDataFrame(peopleRdd, People.class);
-        peopleDf.registerTempTable("people");
-        sqlContext.sql("select name,age from people").show();
-        //age的值，加上5
-        peopleDf.select(peopleDf.col("age").plus(5)).show();
-        // age > 25 的记录
-        peopleDf.filter(peopleDf.col("age").gt(25)).show();
-
-
-        // dataFrame 转换为 javaRDD
-        JavaRDD<Row> rowPeopleRDD  = peopleDf.toJavaRDD();
-        rowPeopleRDD.map(new Function<Row, People>() {
+       JavaRDD<Row> peopleRow =  lines.map(new Function<String, Row>() {
             @Override
-            public People call(Row row) throws Exception {
-                String name = row.getAs("name");
-                Integer age = row.getAs("age");
-                return new People(name,age);
-            }
-        }).foreach(new VoidFunction<People>() {
-            public void call(People people) throws Exception {
-                System.out.println(people);
+            public Row call(String line) throws Exception {
+                String[] split = line.split(",");
+                return RowFactory.create(split[0].trim(), Integer.valueOf(split[1].trim()));
             }
         });
 
+        //创建 peopleRow的元数据字段信息
+        List<StructField> structFields = new ArrayList<StructField>();
+        structFields.add(DataTypes.createStructField("name", DataTypes.StringType, true));
+        structFields.add(DataTypes.createStructField("age", DataTypes.IntegerType, true));
 
+        StructType structType = DataTypes.createStructType(structFields);
+
+        DataFrame peopleDf = sqlContext.createDataFrame(peopleRow, structType);
+
+        peopleDf.show();
 
         sc.stop();
     }
