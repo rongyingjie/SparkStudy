@@ -8,9 +8,6 @@ import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author 燕赤侠
@@ -51,11 +48,9 @@ public class RDD2DataFrameJavaBean implements java.io.Serializable{
         // age > 25 的记录
         peopleDf.filter(peopleDf.col("age").gt(25)).show();
 
-
         // dataFrame 转换为 javaRDD
         JavaRDD<Row> rowPeopleRDD  = peopleDf.toJavaRDD();
         rowPeopleRDD.map(new Function<Row, People>() {
-            @Override
             public People call(Row row) throws Exception {
                 String name = row.getAs("name");
                 Integer age = row.getAs("age");
@@ -67,9 +62,8 @@ public class RDD2DataFrameJavaBean implements java.io.Serializable{
             }
         });
 
-
-
         sc.stop();
+
     }
 
 }
