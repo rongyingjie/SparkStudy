@@ -7,7 +7,6 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.api.java.function.VoidFunction;
-import org.apache.spark.sql.SQLContext;
 import scala.Tuple2;
 import scala.actors.threadpool.Arrays;
 
