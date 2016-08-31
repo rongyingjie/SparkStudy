@@ -40,7 +40,6 @@ public class WordCount {
                 return new Tuple2<String, Integer>(s,1);
             }
         }).reduceByKey(new Function2<Integer, Integer, Integer>() {
-
             public Integer call(Integer v1, Integer v2) throws Exception {
                 return v1+v2;
             }
