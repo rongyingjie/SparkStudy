@@ -20,7 +20,7 @@ import java.util.List;
  * @author 燕赤侠
  * @create 2016-09-02
  */
-public class UdfTopN {
+public class UdfGroupTopN {
 
     public static void main(String[] args) {
 
