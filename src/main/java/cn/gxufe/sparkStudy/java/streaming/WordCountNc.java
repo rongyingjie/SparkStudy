@@ -21,7 +21,7 @@ public class WordCountNc {
 
 
         SparkConf conf = new SparkConf()
-                .setMaster("local[2]")
+                .setMaster("local[2]")//至少启动2个线程
                 .setAppName("WordCountNc");
 
         // 这里设置3秒
