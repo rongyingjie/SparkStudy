@@ -50,6 +50,7 @@ public class UdfGroupTopN {
 
         peopleDf.registerTempTable("topnTable");
 
+        //取出前四位数据
         sqlContext.udf().register("TopN",new TopN(4));
 
         sqlContext.sql("select category,TopN(sale) as topN  from topnTable group by category ").show();
@@ -64,7 +65,6 @@ public class UdfGroupTopN {
         private int n;
 
         public TopN( int n ){
-
             this.n = n;
             if(bufferSchema == null){
                 List<StructField> structFields = new ArrayList<StructField>();
@@ -73,13 +73,11 @@ public class UdfGroupTopN {
                 }
                 bufferSchema = DataTypes.createStructType(structFields);
             }
-
             if(inputSchema == null){
                 List<StructField> structFields = new ArrayList<StructField>();
                 structFields.add(DataTypes.createStructField("_1", DataTypes.IntegerType, true));
                 inputSchema = DataTypes.createStructType(structFields);
             }
-
         }
 
         //输入数据类型设置
@@ -136,25 +134,29 @@ public class UdfGroupTopN {
         public void merge(MutableAggregationBuffer buffer, Row row) {
 
             List<Integer> list = new ArrayList<>(buffer.size() * 2);
-
             for (int i = 0; i < buffer.size(); i++) {
                 list.add(buffer.getInt(i));
                 list.add(row.getInt(i));
             }
 
-            //冒泡排序
-            for (int i = list.size()-1; i > 0 ; i--) {
-                for (int j=0;j<i;j++){
-                    if(list.get(j) < list.get(j + 1)){
-                        Integer  tmp = list.get(j);
-                        list.set(j,list.get(j+1));
-                        list.set(j+1,tmp);
+            int i,j,flag,tmp;
+            flag=1;
+            // 降序排列
+            for(i=1; i<list.size() && flag==1;i++ ){
+                flag = 0; // 标记位，如果在一趟排序中，如果没有发生移动，就提前结束
+                for (j=0;j<n-i;j++){
+                    if(list.get(j) < list.get(j+1)){
+                        flag=1; //  说明在 j,循环排序过程，有数据移动
+                        tmp=list.get(j+1);
+                        list.set(j+1,list.get(j));
+                        list.set(j,tmp);
                     }
                 }
             }
 
-            for (int i = 0; i < buffer.size(); i++) {
-                buffer.update(i,list.get(i));
+            //取出前三位数据
+            for (int k = 0; k < buffer.size(); k++) {
+                buffer.update(k,list.get(k));
             }
 
         }
