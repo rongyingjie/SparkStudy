@@ -16,6 +16,7 @@ import java.util.Arrays;
  * @create 2016-09-04
  */
 public class HDFSWordCount {
+
     public static void main(String[] args) throws Exception {
 
 
@@ -26,6 +27,7 @@ public class HDFSWordCount {
         // 这里设置3秒
         JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(3));
 
+        //所监控的hdfs目录
         JavaDStream<String> lines = jssc.textFileStream("hdfs://hadoop02:9000/HDFSWordCount");
 
         lines.flatMap(new FlatMapFunction<String, String>() {
@@ -48,4 +50,6 @@ public class HDFSWordCount {
         jssc.stop();
 
     }
+
+
 }
