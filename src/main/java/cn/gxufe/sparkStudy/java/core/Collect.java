@@ -16,7 +16,8 @@ public class Collect {
 
     public static void main(String[] args) {
       //  intersection();
-        distinct();
+      //  distinct();
+        intersection();
     }
 
 
@@ -48,6 +49,7 @@ public class Collect {
     public static void intersection(){
         JavaSparkContext sc = null;
         SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("WordCount");
+        sparkConf.set("spark.ui.enabled","false");
         sc = new JavaSparkContext(sparkConf);
 
         List<Integer> list1 =  Arrays.asList(1, 2, 3, 4, 5, 6);
