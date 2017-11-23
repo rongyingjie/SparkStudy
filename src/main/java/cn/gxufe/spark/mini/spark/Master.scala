@@ -13,13 +13,13 @@ class Master(val host:String,val port:Int) extends Actor with org.apache.spark.L
 
   override def preStart(): Unit = {
     import this.context.dispatcher
-    context.system.scheduler.schedule(0 millis,3 millis,this.context.self,CheckWorkerHeartbeat)
+    context.system.scheduler.schedule(0 millis,3 second,this.context.self,CheckWorkerHeartbeat)
   }
 
   override def receive:Receive = {
     case Heartbeat(uuid) => {
       if(workers.getOrElse(uuid,null) != null){
-        logInfo( "Heartbeat host = " + host+",uuid = " + uuid )
+        logDebug( "Heartbeat host = " + host+",uuid = " + uuid )
         workers(uuid).lastUpdateTime = System.currentTimeMillis()
       } else {
         logError( " uuid =" + uuid +" not worker !!! ")
@@ -37,9 +37,12 @@ class Master(val host:String,val port:Int) extends Actor with org.apache.spark.L
     case CheckWorkerHeartbeat => {
       val currentTimeMillis = System.currentTimeMillis()
       val removeWorker = workers.filter( t => {  currentTimeMillis - t._2.lastUpdateTime >  1000*6 } )
+      for( worker <- removeWorker){
+        logInfo( "remove worker id = " + worker._1 + " host = " + worker._2.host )
+        workers.remove(worker._1)
+      }
     }
   }
-
 }
 
 object Master {

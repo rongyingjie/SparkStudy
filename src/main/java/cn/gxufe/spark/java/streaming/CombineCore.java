@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author 燕赤侠
  * @create 2016-09-06
  */
 public class CombineCore {

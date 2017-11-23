@@ -1,6 +1,6 @@
 package cn.gxufe.spark.scala.streaming
 
-import org.apache.spark.SparkConf
+import org.apache.spark.{HashPartitioner, SparkConf}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 object WordCountStateByKey {
@@ -18,9 +18,22 @@ object WordCountStateByKey {
       Some(previousCount)
     }
 
+
+    val updateFunc01 = (it: Iterator[(String, Seq[Int], Option[Int])]) => {
+      val n = it.map( item => {
+        val nowValue = item._2.sum + item._3.getOrElse(0)
+        (item._1,nowValue)
+      } )
+      n
+    }
+
+
     ssc.checkpoint("/home/rongyingjie/spark/checkpoint")
 
-    lines.flatMap( _.split(" ")).map(x => (x,1)).reduceByKey(_ + _).updateStateByKey(updateFunc).print()
+  //  lines.flatMap( _.split(" ")).map(x => (x,1)).reduceByKey(_ + _).updateStateByKey(updateFunc).print()
+
+    lines.flatMap( _.split(" ")).map(x => (x,1)).reduceByKey(_ + _).updateStateByKey(updateFunc01,new HashPartitioner(3),true).print()
+
 
     ssc.start()
     ssc.awaitTermination()

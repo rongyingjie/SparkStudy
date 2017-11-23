@@ -6,11 +6,11 @@ import org.apache.spark.{SparkConf, SparkContext}
 object TransformationsActionRdd {
 
   def main(args: Array[String]): Unit = {
-    val sparkConf = new SparkConf().setMaster("local[1]").setAppName("TransformationsRdd");
+    val sparkConf = new SparkConf().setMaster("local[1]").setAppName("TransformationsRdd")
     val sparkContext = new SparkContext(sparkConf)
     //   mapPartitionsTest01(sparkContext)
     //  mapPartitionsWithIndexTest(sparkContext)
-    coalesesRepartition(sparkContext)
+    mapPartitionsWithIndexTest(sparkContext)
     sparkContext.stop()
   }
 
@@ -31,7 +31,8 @@ object TransformationsActionRdd {
 
   def mapPartitionsWithIndexTest(sc:SparkContext):Unit = {
     var rdd = sc.makeRDD(1 to 20,5)
-    rdd.mapPartitionsWithIndex( (index,it) => {
+
+    val s = rdd.mapPartitionsWithIndex( (index,it) => {
       var result = List[Tuple2[Int,Int]]()
       var tmp = 0
       while(it.hasNext) {
@@ -39,7 +40,9 @@ object TransformationsActionRdd {
         result = result.+:( (tmp, index) )
       }
       result.iterator
-    } ).foreach(println)
+    } ).foreach( x => x)
+
+    println(s)
   }
 
 

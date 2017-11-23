@@ -9,30 +9,27 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
-            <version>1.6.0-cdh5.8.3</version>
+            <version>1.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.10</artifactId>
-            <version>1.6.0-cdh5.8.3</version>
+            <version>1.6.3</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>
-            <version>1.6.0-cdh5.8.3</version>
+            <version>1.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-kafka_2.10</artifactId>
-            <version>1.6.0-cdh5.8.3</version>
+            <version>1.6.3</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -72,7 +69,7 @@
         </plugins>
     </build>
 
-    <repositories>
+<!--    <repositories>
         <repository>
             <name>yovole</name>
             <url>http://nexus.yovole.tech:8081/nexus/content/groups/public/</url>
@@ -82,6 +79,14 @@
             <id>cloudera</id>
             <name>cloudera</name>
             <url>http://nexus.yovole.tech:8081/nexus/content/repositories/cloudera/</url>
+        </repository>
+    </repositories>-->
+
+    <repositories>
+        <repository>
+            <id>cloudera</id>
+            <name>cloudera</name>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
         </repository>
     </repositories>
 
