@@ -69,19 +69,6 @@
         </plugins>
     </build>
 
-<!--    <repositories>
-        <repository>
-            <name>yovole</name>
-            <url>http://nexus.yovole.tech:8081/nexus/content/groups/public/</url>
-            <id>yovole</id>
-        </repository>
-        <repository>
-            <id>cloudera</id>
-            <name>cloudera</name>
-            <url>http://nexus.yovole.tech:8081/nexus/content/repositories/cloudera/</url>
-        </repository>
-    </repositories>-->
-
     <repositories>
         <repository>
             <id>cloudera</id>
