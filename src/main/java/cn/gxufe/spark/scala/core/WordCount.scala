@@ -8,13 +8,13 @@ import scala.collection.mutable
 object WordCount {
 
   def main(args: Array[String]): Unit = {
-    val path = "/home/rongyingjie/path/zookeeper-3.4.8/README.txt"
-    val sparkConf = new SparkConf().setMaster("local[2]").setAppName("WordCount");
+    val path = "/home/rongyingjie/path/zookeeper-3.4.9/README.txt"
+    val sparkConf = new SparkConf().setMaster("local[2]").setAppName("WordCount")
     val sparkContext = new SparkContext(sparkConf)
     val lines = sparkContext.textFile(path)
 
     val res = lines.flatMap( line => {
-      line.split(" ")
+      line.split(" +")
     }).map( x => (x,1) ).reduceByKey( (x,y) => x+y ).filter( t => t._2 > 2 ).collect()
     for (i <- res){
       println(i)

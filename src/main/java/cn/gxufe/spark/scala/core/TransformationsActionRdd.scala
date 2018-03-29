@@ -15,7 +15,7 @@ object TransformationsActionRdd {
   }
 
   def mapPartitionsTest(sc:SparkContext):Unit = {
-    var rdd = sc.makeRDD(1 to 100,5)
+    val rdd = sc.makeRDD(1 to 100,5)
 
     rdd.mapPartitions(
       x => {
@@ -30,7 +30,7 @@ object TransformationsActionRdd {
   }
 
   def mapPartitionsWithIndexTest(sc:SparkContext):Unit = {
-    var rdd = sc.makeRDD(1 to 20,5)
+    val rdd = sc.makeRDD(1 to 20,5)
 
     val s = rdd.mapPartitionsWithIndex( (index,it) => {
       var result = List[Tuple2[Int,Int]]()
