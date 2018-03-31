@@ -6,10 +6,14 @@ import scala.collection.mutable.ArrayBuffer
 
 /*
 
-1:0|1 2,3,4
-2:0|1 3,4
-3:0|1 4
-4:0|1 2
+A:0|0.2 B,C,D
+B:0|0.2 D,E
+C:0|0.2 E
+D:0|0.2 E
+E:0|0.2 A
+
+参考图例：
+  https://www.cnblogs.com/rubinorth/p/5799848.html
 
  */
 object PageRank {
