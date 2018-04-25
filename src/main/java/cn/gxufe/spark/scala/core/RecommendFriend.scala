@@ -3,6 +3,7 @@ package cn.gxufe.spark.scala.core
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable.ArrayBuffer
+import util.control.Breaks._
 
 /**
 
@@ -14,16 +15,13 @@ import scala.collection.mutable.ArrayBuffer
 6 1,4
 7 1,2
 8 1
-
-
-
-
+import util.control.Breaks._
 
   */
 object RecommendFriend {
 
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setMaster("local[*]").setAppName("RecommendFriend")
+    val conf = new SparkConf().setMaster("local[1]").setAppName("RecommendFriend")
     val sc = new SparkContext(conf)
 
     val self2friends  = sc.textFile("src/main/resources/RecommendFriend.txt").map(line => {
@@ -45,20 +43,25 @@ object RecommendFriend {
           val i2Friends = i2._2.split(",")
           var sum = 0
           var flag = true
-          for( i1i <- i1Friends){
-            for( i2i <- i2Friends ){
+
+          breakable {
+            for( i1i <- i1Friends){
+              for( i2i <- i2Friends ){
                 if (i1i.equals(i2._1) && i2i.equals(i1._1)) { // 已经是好友
                   flag = false
+                  break()
                 }else{
                   if( i1i.equals(i2i) ){
                     sum += 1
                   }
                 }
+              }
             }
           }
-          if(flag  ){ // 已经是好友
+
+          if(flag  ){ // 非好友
             val rate = sum.toDouble / Math.sqrt( i1Friends.length * i2Friends.length )
-            arrayBuffer += new Tuple2( i1._1,i2._1+":"+rate)
+            arrayBuffer += new Tuple2( i1._1,i2._1+":"+sum+":"+rate)
           }
           arrayBuffer.toList
         }
